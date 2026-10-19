@@ -1121,3 +1121,200 @@ in-progress edit to that file, not something to reconcile without being asked.
 match the active files, (b) deleted if it's dead/unused, or (c) left alone because it serves some
 other purpose (e.g. a canonical export the user maintains for OTHER stores) this session doesn't
 have visibility into. Ask before touching it either way.
+
+**Resolved (2026-10-13): user said leave it alone** - `shopflo-shopify-neo/` serves a purpose
+outside this session's visibility; left untouched, including its own pending uncommitted edit.
+
+---
+
+## 28. "Match header text color" only synced the icon, not the login label - split into two settings
+
+**Report**: the existing `shopflo_account_icon_sync_header_button_a/b/c` checkbox (§15a/§27)
+visibly only recolors the account ICON to match the header - the "Login" text next to it keeps its
+own fixed Text color setting regardless. Correct as originally scoped (the setting's own info text
+always said "icon"), but the user wants independent control over both.
+
+**Fix**: added a SEPARATE checkbox per button, `shopflo_account_label_sync_header_button_a/b/c`
+("Match header text color (label)"), gated the same way as its icon counterpart (B/C additionally
+require `shopflo_account_match_with_button_b/c == 'none'`) and hiding the "Text color" picker when
+enabled - exact mirror of how the icon's own sync setting already hides "Icon color". Renamed the
+existing icon checkbox's label to "Match header text color (icon)" so the two read as a clearly
+paired set in the Theme Editor.
+
+**Wiring**: `account_label_sync_header` threaded through the SAME two-pass B/C inheritance cascade
+as every other per-button field (§5 pattern) in `snippets/shopflo.liquid`, alongside the existing
+`account_icon_sync_header` - both now resolve independently per slot. Replaced the inline
+`class="shopflo-accounts__label sf-text--{{ account_font_weight }}"` on both the logged-out and
+logged-in label `<span>`s with a single precomputed `account_label_class` variable (same pattern as
+`account_icon_button_class`) that conditionally appends `sf-label-sync-header`.
+
+**CSS**: same proven technique as the icon's `sf-icon-sync-header` (§15a/§27) - the label's default
+color comes from `background` + `background-clip: text` (to support gradients, since
+`color`/`currentColor` can't hold one), so `.shopflo-accounts__label.sf-label-sync-header` undoes
+that entirely (`background: none`, `background-clip: initial`, `-webkit-text-fill-color: inherit`,
+`color: inherit`) and lets the label's native `color` property inherit normally from wherever the
+header sets it - solid color only, no gradient support, by design, exactly like the icon's own
+version. Used a two-class compound selector (not a separately-ordered rule) so it reliably beats
+the base rule regardless of source order - same cascade-order lesson as §5's "Cascade-order
+footgun."
+
+Verified in headless Chrome: an unsynced label keeps its own gradient `background-clip: text`
+color untouched; a synced label correctly inherits the header's actual color (`color: inherit`,
+`background: none`) - independent of whatever the icon's own sync setting is doing.
+
+---
+
+## 29. Resequenced Login Button B/C settings to match Button A's field order
+
+User manually reordered Login Button A's settings block in the Theme Editor schema (grouping
+label/bold/font-size/sync/color together, then icon placement/gap/source/theme-icon/sync/color
+together, then background/icon-size/padding/radius/full-width, then the shadow group) and asked
+for the same order on Button B and Button C. Reordered both blocks in `config/settings_schema.json`
+to match A's id sequence exactly (`shopflo_account_match_with_button_b/c` - the "Inherit styles
+from" field, which only B/C have - kept in its existing position, right after "Dropdown position",
+since A has no equivalent). Pure reordering only - no setting's own `default`/`info`/`visible_if`
+content changed, verified via a scripted id-sequence diff (B and C's sequences, with `match_with`
+removed, now equal A's sequence exactly) and zero duplicate ids across the whole file.
+
+---
+
+## 30. Two new inbound custom events: `shopflo-event:buy-now` and `shopflo-event:checkout`
+
+Extends the existing `shopflo-event:add-to-cart` inbound-event convention (any theme code can
+dispatch a plain `CustomEvent` on `document` instead of calling a global function directly) to
+checkout and buy-now:
+
+- **`shopflo-event:checkout`** - the "simple" one requested: `bindDomEvents()` in
+  `assets/shopflo-script.js` just calls `this.openThemeFloCheckout()`, no event payload needed.
+  Equivalent to calling `window.openThemeFloCheckout()` directly - this is genuinely just an
+  alternate (event-based) spelling of the same call, useful for code that prefers dispatching
+  events over calling globals.
+- **`shopflo-event:buy-now`** - needs the ORIGINAL click/originating event forwarded through,
+  since `openThemeFloBuyNow(originEvent)` passes it to `window.handleFloBuyNowBtn(originEvent)`,
+  which is what `bindQuickViewVariantIsolation()` (§19) relies on to resolve the correct
+  product/variant context when multiple product forms exist on the page at once. Since a
+  `CustomEvent` has no native way to carry an arbitrary object as its own target, the convention is
+  `detail.originEvent`:
+
+  ```js
+  document.dispatchEvent(new CustomEvent('shopflo-event:buy-now', { detail: { originEvent: event } }));
+  ```
+
+  `bindDomEvents()` reads `event.detail && event.detail.originEvent` and forwards it into
+  `openThemeFloBuyNow()`. Omitting `detail.originEvent` still works (passes `undefined` through)
+  but loses the variant-isolation guarantee - only safe on a page with just one product form.
+
+Documented in `snippets/shopflo.liquid`'s `{% doc %}` block (the "CART TRIGGERS" section,
+replacing the old "there is no data-attribute/event convention for checkout" line) and in
+`README.md`'s Events section. Verified by extracting and executing `bindDomEvents()`'s actual
+source in a minimal Node harness (stubbed `document`/`CustomEvent`): `shopflo-event:checkout`
+calls `openThemeFloCheckout()`, and `shopflo-event:buy-now` correctly forwards the exact
+`detail.originEvent` object through to `openThemeFloBuyNow()`.
+
+---
+
+## 31. §24's scoping could still be beaten by a 2+-class ANCESTOR theme selector - hardened
+
+**Report**: even after §24's `.shopflo-scope` ancestor scoping, theme CSS targeting via an ancestor
+SECTION class (e.g. `.section-abc123 .shopflo-checkout__button { ... }`) was still overriding
+Shopflo's own styling in some cases.
+
+**Root cause**: §24's scoping made every Shopflo selector either `.shopflo-scope:is(X)` or
+`.shopflo-scope X` - both exactly ONE extra class of specificity added to whatever X already was.
+For a simple descendant rule like `.shopflo-scope .shopflo-checkout__button` (0,2,0 specificity),
+ANY theme selector that also happens to land on exactly 2 classes - most commonly a single
+ancestor section/wrapper class plus the target class, e.g. `.section-abc123
+.shopflo-checkout__button` - ties at the SAME specificity (0,2,0). Every Shopflo rule already
+carries `!important` (§9), so this only actually bites when the colliding theme rule ALSO happens
+to use `!important` (common with page-builder/app-injected CSS, or a theme's own "important"
+overrides) - at that point the cascade falls back to SOURCE ORDER, and a theme's own stylesheet
+commonly loads/cascades after `assets/shopflo-styles.css`, so the theme rule wins.
+
+**Confirmed empirically, not just reasoned about** - reproduced the exact failure first: loaded
+the PRE-fix stylesheet with a theme rule `.section-abc123 .shopflo-checkout__button { background:
+red !important; }` declared after it - the checkout button's background WAS hijacked to solid red
+(`background-image: none`, confirming the override won completely). Border-radius, by contrast,
+was NOT hijacked even pre-fix, purely by chance - it's set via the root-first COMPOUND form
+(`.shopflo-scope.shopflo-checkout__wrapper:not(...) .shopflo-checkout__button`, already 3 classes
+from §24's wrapper-state compounding), which incidentally outranked a 2-class theme selector. This
+explains why the user saw the hijack on SOME properties/elements but not others - whichever
+Shopflo rule happened to have fewer compounded classes was the one exposed.
+
+**Fix**: every literal `.shopflo-scope` token in `assets/shopflo-styles.css` was mechanically
+quadrupled to `.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope` (a plain Python
+`str.replace` - safe because `.shopflo-scope` never appears as a substring of a different class
+name anywhere in the file, confirmed by grep, and never appears inside a comment, confirmed by
+masking comments before counting). This is valid, well-defined CSS: a class repeated N times in a
+compound selector still matches the exact same single element (an element either has class
+`shopflo-scope` or it doesn't - repeating the check changes nothing about WHAT matches) but
+contributes N specificity units instead of 1, with zero markup changes needed (the element still
+only needs the class once in its real `class` attribute). Every Shopflo selector's ancestor/self
+scope-check now contributes 4 specificity units on its own, before even counting the actual target
+class(es) - enough to beat any realistic theme selector depth (a theme would need 4+ of its own
+ancestor classes just to TIE the scope portion alone, then still lose to the target class on top).
+
+**Verified by re-running the exact same reproduction**: same pre-fix-failing scenario (2-class and
+3-class `!important` ancestor selectors, declared after Shopflo's stylesheet) - background and
+border-radius both now correctly resolve to Shopflo's own values. Also re-validated: `shopify
+theme check` clean (same 31-error/35-warning baseline, unrelated to this file), and the CSSOM
+rule-count check from §24 still shows every rule parsing successfully (182 total rules now, up
+from 181 - the +1 is the `.sf-label-sync-header` rule added in §28, not a parsing loss).
+
+**If this needs doing again** (e.g. after adding brand-new rules that don't yet have the
+`.shopflo-scope` repetition): the mechanical fix is exactly `content.replace('.shopflo-scope',
+'.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope')` over the whole file - safe to re-run
+any time, since repeated applications just keep adding more harmless repetitions (though there's
+no need to go beyond 4x; re-running wastes file size, not correctness, so only do it if NEW rules
+were added using a bare single `.shopflo-scope` by mistake, e.g. copy-pasted from this documentation
+block itself rather than from an existing already-hardened rule in the file).
+
+---
+
+## 32. JS hijack-proofing: third-party/theme scripts binding to the shared Shopify button classes
+
+**Report**: following §24/§31's CSS hardening, the user noticed the SAME underlying risk on the JS
+side - a third-party or theme script "hijacking" the buy-now button, which deliberately carries
+Shopify's own native `.shopify-payment-button__button`/`--unbranded` classes (see the big comment
+on that markup in `snippets/shopflo.liquid` - borrowed on purpose so the Shopflo bundle's own
+quantity/variant detection works the same as it would for a real native dynamic-checkout button).
+That's also exactly the kind of generic, well-known class convention OTHER code (theme JS, apps,
+possibly Shopify's own platform scripts) might independently query for and bind its own behavior
+to - since we can't drop these classes without breaking quantity sync, the fix has to make OUR
+handling win the race instead.
+
+**Fix 1 - capture-phase click interception + `stopImmediatePropagation()`.** Both of
+`bindPopupMorph()`'s `document.addEventListener('click', ...)` listeners (the `reduceMotion`
+branch and the main animated branch) now register with `{ capture: true }` instead of the default
+bubble phase, and call `event.stopImmediatePropagation()` as soon as a real
+`.shopflo-popup-trigger` + valid `data-flo-action` match is confirmed, before doing any actual
+work. A capture-phase listener on `document` ALWAYS runs before any other listener - capture or
+bubble - attached anywhere closer to the target, including directly on the button itself; this is
+the earliest possible interception point in the entire event dispatch. `stopImmediatePropagation()`
+at that point prevents every other listener on the SAME click (bound to the button or any
+ancestor) from ever running, regardless of what it is or where it came from.
+
+**Fix 2 - new `bindButtonHijackProtection()`, a MutationObserver safety net.** Defends the
+MUTATION side of the same risk (not clicks) - a script scanning for the native convention could
+try to "hydrate" the button, stripping `data-flo-action` or the `.shopflo-popup-trigger`/
+`.shopflo-buy-now__button`/`.shopflo-checkout__button` classes our own click delegation depends on,
+which would break it completely with no visible error. Watches `attributes`/`data-flo-action` on
+`#flo-buy-now-button` and `#flo-checkout-button`, and immediately re-adds anything missing. Scoped
+narrowly to just these two hooks - it does NOT revert the whole element/class list wholesale, so it
+doesn't fight with legitimate changes (e.g. `bindBuyNowAtcSync()`'s own `disabled` toggling, or a
+real third-party class the hijacking script adds alongside ours - that stays, only the STRIPPED
+Shopflo hooks get restored). Self-terminating despite observing its own mutations: a restore that
+changes nothing fires the observer once more with no actual diff, so it settles after at most one
+extra no-op pass - never loops.
+
+**Verified in headless Chrome, both scenarios reproduced directly**:
+
+1. A simulated third-party bubble-phase click listener bound directly to
+   `.shopify-payment-button__button` (attached before Shopflo's own script, the worst case) never
+   fired at all once Shopflo's capture-phase listener ran first and called
+   `stopImmediatePropagation()` - confirmed via an event log array, only `"shopflo-ran:buy-now"`
+   recorded.
+2. A simulated hijack that stripped `data-flo-action` entirely and overwrote `className` wholesale
+   (replacing it with the hijacker's own classes) - after the mutation, `data-flo-action="buy-now"`
+   and both `shopflo-popup-trigger`/`shopflo-buy-now__button` were back, WHILE the hijacker's own
+   classes (`shopify-payment-button__button`, `--unbranded`, a fake `some-theme-class`) were still
+   present too - confirms the restore is additive/non-destructive, not a wholesale revert.
