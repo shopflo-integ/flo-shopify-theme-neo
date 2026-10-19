@@ -42,6 +42,7 @@ class ShopfloTheme {
     this.bindPopupMorph();
     this.bindLabelWidthGuard();
     this.bindQuickViewVariantIsolation();
+    this.bindButtonHijackProtection();
   }
 
   isDomesticTimezone() {
@@ -144,6 +145,33 @@ class ShopfloTheme {
     }
   }
 
+  bindButtonHijackProtection() {
+    const targets = [
+      { el: this.buyNowButton, action: 'buy-now', ownClass: 'shopflo-buy-now__button' },
+      { el: document.getElementById('flo-checkout-button'), action: 'checkout', ownClass: 'shopflo-checkout__button' },
+    ];
+
+    targets.forEach(({ el, action, ownClass }) => {
+      if (!el) return;
+
+      const requiredClasses = ['shopflo-popup-trigger', ownClass];
+
+      const restore = () => {
+        if (el.getAttribute('data-flo-action') !== action) {
+          el.setAttribute('data-flo-action', action);
+        }
+        requiredClasses.forEach((cls) => {
+          if (!el.classList.contains(cls)) el.classList.add(cls);
+        });
+      };
+
+      restore();
+
+      const observer = new MutationObserver(restore);
+      observer.observe(el, { attributes: true, attributeFilter: ['class', 'data-flo-action'] });
+    });
+  }
+
   bindQuickViewVariantIsolation() {
     const isolate = (event) => {
       const trigger = event && event.target && typeof event.target.closest === 'function'
@@ -215,6 +243,15 @@ class ShopfloTheme {
       }
       this.dispatchCartOpened();
       window.handleFloCartBtn();
+    });
+
+    document.addEventListener('shopflo-event:buy-now', (event) => {
+      const originEvent = event.detail && event.detail.originEvent;
+      this.openThemeFloBuyNow(originEvent);
+    });
+
+    document.addEventListener('shopflo-event:checkout', () => {
+      this.openThemeFloCheckout();
     });
   }
 
@@ -339,12 +376,14 @@ class ShopfloTheme {
       document.addEventListener('click', (event) => {
         const trigger = event.target.closest('.shopflo-popup-trigger');
         if (!trigger || trigger.disabled) return;
+        if (trigger.dataset.floAction !== 'buy-now' && trigger.dataset.floAction !== 'checkout') return;
+        event.stopImmediatePropagation();
         if (trigger.dataset.floAction === 'buy-now') {
           this.openThemeFloBuyNow(event);
-        } else if (trigger.dataset.floAction === 'checkout') {
+        } else {
           this.openThemeFloCheckout();
         }
-      });
+      }, { capture: true });
       return;
     }
 
@@ -362,13 +401,15 @@ class ShopfloTheme {
       if (!trigger || trigger.disabled || this.popupAnimating) return;
       if (trigger.dataset.floAction !== 'buy-now' && trigger.dataset.floAction !== 'checkout') return;
 
+      event.stopImmediatePropagation();
+
       if (!this.shouldTriggerFloDirectly()) {
         window.location.href = '/checkout';
         return;
       }
 
       this.openPopupFrom(trigger, event);
-    });
+    }, { capture: true });
 
     const closeBtn = document.getElementById('popupClose');
     if (closeBtn) closeBtn.addEventListener('click', () => this.closePopup());

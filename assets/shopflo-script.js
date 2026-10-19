@@ -44,6 +44,7 @@ class ShopfloTheme {
     this.bindPopupMorph();
     this.bindLabelWidthGuard();
     this.bindQuickViewVariantIsolation();
+    this.bindButtonHijackProtection();
   }
 
   isDomesticTimezone() {
@@ -165,6 +166,45 @@ class ShopfloTheme {
   // implementations, or DOM structure - it only assumes the standard onclick="handleFloBuyNowBtn(event)"
   // convention (this snippet's own markup, see shopflo.liquid) and Shopify's own
   // input[name="id"] variant convention, both of which are portable to any theme.
+  // Defense-in-depth against the SAME "shared Shopify convention" risk the capture-phase click
+  // listeners above guard against, but for DOM mutation instead of click interception: our
+  // buy-now button deliberately carries Shopify's own native
+  // .shopify-payment-button__button(--unbranded) classes (see snippets/shopflo.liquid) so the
+  // Shopflo bundle's quantity detection works - but a third-party/theme script (or Shopify's own
+  // platform script) scanning the page for that exact convention could also try to "hydrate" our
+  // button into a real native dynamic-checkout element, stripping our `data-flo-action` attribute
+  // or `.shopflo-popup-trigger` class in the process - either one breaks the click delegation in
+  // bindPopupMorph() silently (no error, the button just stops doing anything). A MutationObserver
+  // watching ONLY these two specific hooks re-asserts them immediately if anything removes them,
+  // without reverting any OTHER attribute/class change a legitimate script might also be making
+  // (e.g. our own bindBuyNowAtcSync() toggling `disabled`).
+  bindButtonHijackProtection() {
+    const targets = [
+      { el: this.buyNowButton, action: 'buy-now', ownClass: 'shopflo-buy-now__button' },
+      { el: document.getElementById('flo-checkout-button'), action: 'checkout', ownClass: 'shopflo-checkout__button' },
+    ];
+
+    targets.forEach(({ el, action, ownClass }) => {
+      if (!el) return;
+
+      const requiredClasses = ['shopflo-popup-trigger', ownClass];
+
+      const restore = () => {
+        if (el.getAttribute('data-flo-action') !== action) {
+          el.setAttribute('data-flo-action', action);
+        }
+        requiredClasses.forEach((cls) => {
+          if (!el.classList.contains(cls)) el.classList.add(cls);
+        });
+      };
+
+      restore();
+
+      const observer = new MutationObserver(restore);
+      observer.observe(el, { attributes: true, attributeFilter: ['class', 'data-flo-action'] });
+    });
+  }
+
   bindQuickViewVariantIsolation() {
     const isolate = (event) => {
       const trigger = event && event.target && typeof event.target.closest === 'function'
@@ -247,6 +287,23 @@ class ShopfloTheme {
       }
       this.dispatchCartOpened();
       window.handleFloCartBtn();
+    });
+
+    // Buy Now needs the ORIGINAL click/originating event forwarded through to
+    // openThemeFloBuyNow() -> window.handleFloBuyNowBtn(originEvent), since that's what lets
+    // bindQuickViewVariantIsolation() (see above) resolve the correct product/variant context -
+    // so the dispatcher must pass it via `detail`, e.g.:
+    //   document.dispatchEvent(new CustomEvent('shopflo-event:buy-now', { detail: { originEvent: event } }));
+    document.addEventListener('shopflo-event:buy-now', (event) => {
+      const originEvent = event.detail && event.detail.originEvent;
+      this.openThemeFloBuyNow(originEvent);
+    });
+
+    // Checkout needs no event/context of its own - just opens Shopflo's real checkout (or falls
+    // back to a plain /checkout navigation when shouldTriggerFloDirectly() is false), same as
+    // calling window.openThemeFloCheckout() directly.
+    document.addEventListener('shopflo-event:checkout', () => {
+      this.openThemeFloCheckout();
     });
   }
 
@@ -381,15 +438,29 @@ class ShopfloTheme {
       this.config.shopflo_enable_popup_animation === false;
 
     if (this.reduceMotion) {
+      // Capture phase + stopImmediatePropagation: our own buy-now button deliberately carries
+      // Shopify's native .shopify-payment-button__button(--unbranded) classes (see the big
+      // comment on that markup in snippets/shopflo.liquid) purely so the Shopflo bundle's own
+      // quantity/variant detection works - but that's also a well-known, generic convention other
+      // scripts (theme code, apps, Shopify's own platform scripts) may independently bind their
+      // OWN click handlers to by querying for the same class. A capture-phase listener on
+      // `document` always runs before ANY listener - capture or bubble - attached closer to the
+      // target (including directly on the button itself), so this is the earliest point in the
+      // whole dispatch where we can intercept the click; stopImmediatePropagation() here then
+      // prevents every other listener on this exact click (on the button, or any ancestor) from
+      // running at all, so a third-party/theme script bound to these shared classes can't act on
+      // a click meant for us.
       document.addEventListener('click', (event) => {
         const trigger = event.target.closest('.shopflo-popup-trigger');
         if (!trigger || trigger.disabled) return;
+        if (trigger.dataset.floAction !== 'buy-now' && trigger.dataset.floAction !== 'checkout') return;
+        event.stopImmediatePropagation();
         if (trigger.dataset.floAction === 'buy-now') {
           this.openThemeFloBuyNow(event);
-        } else if (trigger.dataset.floAction === 'checkout') {
+        } else {
           this.openThemeFloCheckout();
         }
-      });
+      }, { capture: true });
       return;
     }
 
@@ -402,10 +473,18 @@ class ShopfloTheme {
     this.pendingFloAction = null;
     this.pendingFloEvent = null;
 
+    // Capture phase + stopImmediatePropagation - see the matching comment in the reduceMotion
+    // branch above for why: our buy-now button deliberately shares Shopify's own native
+    // .shopify-payment-button__button(--unbranded) convention for the bundle's quantity
+    // detection, which is also exactly the kind of generic class a third-party/theme script might
+    // independently bind its own click handler to. Capturing at `document` guarantees we see the
+    // click before any such listener does, anywhere on the page.
     document.addEventListener('click', (event) => {
       const trigger = event.target.closest('.shopflo-popup-trigger');
       if (!trigger || trigger.disabled || this.popupAnimating) return;
       if (trigger.dataset.floAction !== 'buy-now' && trigger.dataset.floAction !== 'checkout') return;
+
+      event.stopImmediatePropagation();
 
       if (!this.shouldTriggerFloDirectly()) {
         window.location.href = '/checkout';
@@ -413,7 +492,7 @@ class ShopfloTheme {
       }
 
       this.openPopupFrom(trigger, event);
-    });
+    }, { capture: true });
 
     const closeBtn = document.getElementById('popupClose');
     if (closeBtn) closeBtn.addEventListener('click', () => this.closePopup());

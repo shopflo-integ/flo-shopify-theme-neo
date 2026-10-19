@@ -52,6 +52,9 @@ Plain `CustomEvent`s on `document` — listen the normal way:
 
 - `shopflo-event:add-to-cart` — **inbound**: dispatch this after your own add-to-cart to open
   Shopflo's cart.
+- `shopflo-event:checkout` — **inbound**: dispatch this to open Shopflo's checkout.
+- `shopflo-event:buy-now` — **inbound**: dispatch this to trigger Buy Now; pass the original click
+  event via `detail.originEvent` for correct variant resolution.
 - `shopflo-event:checkout-opened` — before the checkout overlay opens.
 - `shopflo-event:cart-opened` — before the cart overlay opens.
 - `shopflo-event:account-drawer-opened` / `-closed` — this theme's own Account dropdown.

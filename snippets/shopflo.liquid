@@ -88,9 +88,23 @@
       shouldTriggerFloDirectly() is false (shopflo_enable off, or an internationally-redirected
       shopper).
 
-    - To open Shopflo's CHECKOUT the same way: use the global `window.openThemeFloCheckout()`
-      directly (`onclick="openThemeFloCheckout()"`) for any custom checkout/buy-link that isn't
-      one of this snippet's own buttons - there is no data-attribute/event convention for checkout.
+    - To open Shopflo's CHECKOUT the same way: either call the global `window.openThemeFloCheckout()`
+      directly (`onclick="openThemeFloCheckout()"`), or dispatch the custom DOM event
+      `shopflo-event:checkout` on `document` - `bindDomEvents()` in assets/shopflo-script.js
+      listens for it and calls `openThemeFloCheckout()` with no extra setup needed:
+
+        document.dispatchEvent(new CustomEvent('shopflo-event:checkout'));
+
+    - To trigger Shopflo's BUY NOW flow the same way: dispatch the custom DOM event
+      `shopflo-event:buy-now` on `document`, with the ORIGINAL click/originating event forwarded
+      through `detail.originEvent` - `bindDomEvents()` passes it straight into
+      `openThemeFloBuyNow(originEvent)` -> `window.handleFloBuyNowBtn(originEvent)`, since that's
+      what lets `bindQuickViewVariantIsolation()` (see assets/shopflo-script.js) resolve the
+      correct product/variant context. Omitting `detail.originEvent` still works, just without
+      that variant-isolation guarantee - only safe when you know only one product's form exists on
+      the page:
+
+        document.dispatchEvent(new CustomEvent('shopflo-event:buy-now', { detail: { originEvent: event } }));
 
     - The header cart ICON (e.g. sections/header.liquid's `<a href="{{ routes.cart_url }}">`) is a
       plain link to the cart PAGE with no Shopflo wiring by default - clicking it just navigates
@@ -1372,6 +1386,7 @@
       assign account_bold_text_button_b_preliminary = settings.shopflo_account_bold_text_button_b
       assign account_full_width_button_b_preliminary = settings.shopflo_account_full_width_button_b
       assign account_icon_sync_header_button_b_preliminary = settings.shopflo_account_icon_sync_header_button_b
+      assign account_label_sync_header_button_b_preliminary = settings.shopflo_account_label_sync_header_button_b
       assign account_icon_source_button_b_preliminary = settings.shopflo_account_icon_source_button_b
       assign account_theme_icon_button_b_preliminary = settings.shopflo_account_theme_icon_button_b
       if settings.shopflo_account_match_with_button_b == 'button_a'
@@ -1380,6 +1395,7 @@
         assign account_bold_text_button_b_preliminary = settings.shopflo_account_bold_text_button_a
         assign account_full_width_button_b_preliminary = settings.shopflo_account_full_width_button_a
         assign account_icon_sync_header_button_b_preliminary = settings.shopflo_account_icon_sync_header_button_a
+        assign account_label_sync_header_button_b_preliminary = settings.shopflo_account_label_sync_header_button_a
         assign account_icon_source_button_b_preliminary = settings.shopflo_account_icon_source_button_a
         assign account_theme_icon_button_b_preliminary = settings.shopflo_account_theme_icon_button_a
       elsif settings.shopflo_account_match_with_button_b == 'button_c'
@@ -1388,6 +1404,7 @@
         assign account_bold_text_button_b_preliminary = settings.shopflo_account_bold_text_button_c
         assign account_full_width_button_b_preliminary = settings.shopflo_account_full_width_button_c
         assign account_icon_sync_header_button_b_preliminary = settings.shopflo_account_icon_sync_header_button_c
+        assign account_label_sync_header_button_b_preliminary = settings.shopflo_account_label_sync_header_button_c
         assign account_icon_source_button_b_preliminary = settings.shopflo_account_icon_source_button_c
         assign account_theme_icon_button_b_preliminary = settings.shopflo_account_theme_icon_button_c
       endif
@@ -1397,6 +1414,7 @@
       assign account_bold_text_button_c = settings.shopflo_account_bold_text_button_c
       assign account_full_width_button_c = settings.shopflo_account_full_width_button_c
       assign account_icon_sync_header_button_c = settings.shopflo_account_icon_sync_header_button_c
+      assign account_label_sync_header_button_c = settings.shopflo_account_label_sync_header_button_c
       assign account_icon_source_button_c = settings.shopflo_account_icon_source_button_c
       assign account_theme_icon_button_c = settings.shopflo_account_theme_icon_button_c
       if settings.shopflo_account_match_with_button_c == 'button_a'
@@ -1405,6 +1423,7 @@
         assign account_bold_text_button_c = settings.shopflo_account_bold_text_button_a
         assign account_full_width_button_c = settings.shopflo_account_full_width_button_a
         assign account_icon_sync_header_button_c = settings.shopflo_account_icon_sync_header_button_a
+        assign account_label_sync_header_button_c = settings.shopflo_account_label_sync_header_button_a
         assign account_icon_source_button_c = settings.shopflo_account_icon_source_button_a
         assign account_theme_icon_button_c = settings.shopflo_account_theme_icon_button_a
       elsif settings.shopflo_account_match_with_button_c == 'button_b'
@@ -1413,6 +1432,7 @@
         assign account_bold_text_button_c = account_bold_text_button_b_preliminary
         assign account_full_width_button_c = account_full_width_button_b_preliminary
         assign account_icon_sync_header_button_c = account_icon_sync_header_button_b_preliminary
+        assign account_label_sync_header_button_c = account_label_sync_header_button_b_preliminary
         assign account_icon_source_button_c = account_icon_source_button_b_preliminary
         assign account_theme_icon_button_c = account_theme_icon_button_b_preliminary
       endif
@@ -1422,6 +1442,7 @@
       assign account_bold_text_button_b = account_bold_text_button_b_preliminary
       assign account_full_width_button_b = account_full_width_button_b_preliminary
       assign account_icon_sync_header_button_b = account_icon_sync_header_button_b_preliminary
+      assign account_label_sync_header_button_b = account_label_sync_header_button_b_preliminary
       assign account_icon_source_button_b = account_icon_source_button_b_preliminary
       assign account_theme_icon_button_b = account_theme_icon_button_b_preliminary
       if settings.shopflo_account_match_with_button_b == 'button_c'
@@ -1430,6 +1451,7 @@
         assign account_bold_text_button_b = account_bold_text_button_c
         assign account_full_width_button_b = account_full_width_button_c
         assign account_icon_sync_header_button_b = account_icon_sync_header_button_c
+        assign account_label_sync_header_button_b = account_label_sync_header_button_c
         assign account_icon_source_button_b = account_icon_source_button_c
         assign account_theme_icon_button_b = account_theme_icon_button_c
       endif
@@ -1440,6 +1462,7 @@
         assign account_bold_text = settings.shopflo_account_bold_text_button_a
         assign account_full_width = settings.shopflo_account_full_width_button_a
         assign account_icon_sync_header = settings.shopflo_account_icon_sync_header_button_a
+        assign account_label_sync_header = settings.shopflo_account_label_sync_header_button_a
         assign account_icon_source = settings.shopflo_account_icon_source_button_a
         assign account_theme_icon = settings.shopflo_account_theme_icon_button_a
       elsif account_slot == 'secondary'
@@ -1448,6 +1471,7 @@
         assign account_bold_text = account_bold_text_button_b
         assign account_full_width = account_full_width_button_b
         assign account_icon_sync_header = account_icon_sync_header_button_b
+        assign account_label_sync_header = account_label_sync_header_button_b
         assign account_icon_source = account_icon_source_button_b
         assign account_theme_icon = account_theme_icon_button_b
       else
@@ -1456,6 +1480,7 @@
         assign account_bold_text = account_bold_text_button_c
         assign account_full_width = account_full_width_button_c
         assign account_icon_sync_header = account_icon_sync_header_button_c
+        assign account_label_sync_header = account_label_sync_header_button_c
         assign account_icon_source = account_icon_source_button_c
         assign account_theme_icon = account_theme_icon_button_c
       endif
@@ -1463,6 +1488,11 @@
       assign account_font_weight = 'normal'
       if account_bold_text
         assign account_font_weight = 'bold'
+      endif
+
+      assign account_label_class = 'shopflo-accounts__label sf-text--' | append: account_font_weight
+      if account_label_sync_header
+        assign account_label_class = account_label_class | append: ' sf-label-sync-header'
       endif
 
       assign label_account = label_account | default: 'Account'
@@ -1543,7 +1573,7 @@
           {%- endif -%}
         {%- endif -%}
         {%- if show_account_label -%}
-          <span class="shopflo-accounts__label sf-text--{{ account_font_weight }}">{{ account_label_text }}</span>
+          <span class="{{ account_label_class }}">{{ account_label_text }}</span>
         {%- endif -%}
       </button>
 
@@ -1579,7 +1609,7 @@
             {%- endif -%}
           {%- endif -%}
           {%- if show_account_label -%}
-            <span class="shopflo-accounts__label sf-text--{{ account_font_weight }}">{{ account_label_text }}</span>
+            <span class="{{ account_label_class }}">{{ account_label_text }}</span>
           {%- endif -%}
         </button>
 

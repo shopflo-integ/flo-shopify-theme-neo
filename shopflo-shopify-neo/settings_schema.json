@@ -1151,7 +1151,7 @@
         "type": "text",
         "id": "shopflo_account_overflow_fix_selectors",
         "label": "Force overflow visible on",
-        "info": "Comma-separated list of CSS classes or IDs (e.g. .header-wrapper, #shopify-section-header) for ancestor elements that clip the account dropdown/login panel with overflow:hidden - their overflow is forced visible while the dropdown or login panel is open. Leave blank if your header doesn't clip it."
+        "info": "If the account dropdown gets cut off, list the header's CSS class(es) or ID here (e.g. .header-wrapper, #shopify-section-header), separated by commas. Leave blank otherwise."
       },
       {
         "type": "header",
@@ -1176,12 +1176,6 @@
             "label": "Both"
           }
         ]
-      },
-      {
-        "type": "checkbox",
-        "id": "shopflo_account_full_width_button_a",
-        "label": "Full width",
-        "default": false
       },
       {
         "type": "select",
@@ -1223,6 +1217,12 @@
         "info": "Leave blank to display icon only."
       },
       {
+        "type": "checkbox",
+        "id": "shopflo_account_bold_text_button_a",
+        "label": "Bold text",
+        "default": true
+      },
+      {
         "type": "range",
         "id": "shopflo_account_font_size_button_a",
         "label": "Font size",
@@ -1234,19 +1234,17 @@
       },
       {
         "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_a",
-        "label": "Bold text",
-        "default": true
+        "id": "shopflo_account_label_sync_header_button_a",
+        "label": "Match header text color (label)",
+        "info": "Login text color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
+        "default": false
       },
       {
-        "type": "range",
-        "id": "shopflo_account_icon_size_button_a",
-        "label": "Icon size",
-        "min": 16,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "default": 20
+        "type": "color_background",
+        "id": "shopflo_account_color_button_a",
+        "label": "Text color",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "visible_if": "{{ settings.shopflo_account_label_sync_header_button_a == false }}"
       },
       {
         "type": "select",
@@ -1275,18 +1273,12 @@
       {
         "type": "range",
         "id": "shopflo_account_icon_gap_button_a",
-        "label": "Icon spacing",
+        "label": "Icon Label gap",
         "min": 0,
         "max": 24,
         "step": 1,
         "unit": "px",
         "default": 6
-      },
-      {
-        "type": "color_background",
-        "id": "shopflo_account_color_button_a",
-        "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)"
       },
       {
         "type": "select",
@@ -1314,8 +1306,8 @@
       {
         "type": "checkbox",
         "id": "shopflo_account_icon_sync_header_button_a",
-        "label": "Match header text color",
-        "info": "Icon inherits whatever text color the header itself is using at that spot, instead of a fixed color/gradient. Only a plain color - a gradient can't be matched.",
+        "label": "Match header text color (icon)",
+        "info": "Icon color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
         "default": false
       },
       {
@@ -1330,6 +1322,16 @@
         "id": "shopflo_account_button_background_button_a",
         "label": "Background color",
         "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)"
+      },
+      {
+        "type": "range",
+        "id": "shopflo_account_icon_size_button_a",
+        "label": "Icon size",
+        "min": 16,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20
       },
       {
         "type": "range",
@@ -1360,6 +1362,12 @@
         "step": 1,
         "unit": "px",
         "default": 8
+      },
+      {
+        "type": "checkbox",
+        "id": "shopflo_account_full_width_button_a",
+        "label": "Full width",
+        "default": false
       },
       {
         "type": "checkbox",
@@ -1460,13 +1468,6 @@
         ]
       },
       {
-        "type": "checkbox",
-        "id": "shopflo_account_full_width_button_b",
-        "label": "Full width",
-        "default": false,
-        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_account_dropdown_vertical_button_b",
         "label": "Dropdown position",
@@ -1527,6 +1528,13 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
+        "type": "checkbox",
+        "id": "shopflo_account_bold_text_button_b",
+        "label": "Bold text",
+        "default": true,
+        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
+      },
+      {
         "type": "range",
         "id": "shopflo_account_font_size_button_b",
         "label": "Font size",
@@ -1539,21 +1547,18 @@
       },
       {
         "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_b",
-        "label": "Bold text",
-        "default": true,
+        "id": "shopflo_account_label_sync_header_button_b",
+        "label": "Match header text color (label)",
+        "info": "Login text color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
+        "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
-        "type": "range",
-        "id": "shopflo_account_icon_size_button_b",
-        "label": "Icon size",
-        "min": 16,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "default": 20,
-        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
+        "type": "color_background",
+        "id": "shopflo_account_color_button_b",
+        "label": "Text color",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' and settings.shopflo_account_label_sync_header_button_b == false }}"
       },
       {
         "type": "select",
@@ -1592,13 +1597,6 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
-        "type": "color_background",
-        "id": "shopflo_account_color_button_b",
-        "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
-        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_account_icon_source_button_b",
         "label": "Icon",
@@ -1625,8 +1623,8 @@
       {
         "type": "checkbox",
         "id": "shopflo_account_icon_sync_header_button_b",
-        "label": "Match header text color",
-        "info": "Icon inherits whatever text color the header itself is using at that spot, instead of a fixed color/gradient. Only a plain color - a gradient can't be matched.",
+        "label": "Match header text color (icon)",
+        "info": "Icon color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
         "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
@@ -1642,6 +1640,17 @@
         "id": "shopflo_account_button_background_button_b",
         "label": "Background color",
         "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "shopflo_account_icon_size_button_b",
+        "label": "Icon size",
+        "min": 16,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20,
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
@@ -1675,6 +1684,13 @@
         "step": 1,
         "unit": "px",
         "default": 8,
+        "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "shopflo_account_full_width_button_b",
+        "label": "Full width",
+        "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
@@ -1777,13 +1793,6 @@
         ]
       },
       {
-        "type": "checkbox",
-        "id": "shopflo_account_full_width_button_c",
-        "label": "Full width",
-        "default": false,
-        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_account_dropdown_vertical_button_c",
         "label": "Dropdown position",
@@ -1844,6 +1853,13 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
+        "type": "checkbox",
+        "id": "shopflo_account_bold_text_button_c",
+        "label": "Bold text",
+        "default": true,
+        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
+      },
+      {
         "type": "range",
         "id": "shopflo_account_font_size_button_c",
         "label": "Font size",
@@ -1856,21 +1872,18 @@
       },
       {
         "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_c",
-        "label": "Bold text",
-        "default": true,
+        "id": "shopflo_account_label_sync_header_button_c",
+        "label": "Match header text color (label)",
+        "info": "Login text color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
+        "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
-        "type": "range",
-        "id": "shopflo_account_icon_size_button_c",
-        "label": "Icon size",
-        "min": 16,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "default": 20,
-        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
+        "type": "color_background",
+        "id": "shopflo_account_color_button_c",
+        "label": "Text color",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' and settings.shopflo_account_label_sync_header_button_c == false }}"
       },
       {
         "type": "select",
@@ -1909,13 +1922,6 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
-        "type": "color_background",
-        "id": "shopflo_account_color_button_c",
-        "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
-        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_account_icon_source_button_c",
         "label": "Icon",
@@ -1942,8 +1948,8 @@
       {
         "type": "checkbox",
         "id": "shopflo_account_icon_sync_header_button_c",
-        "label": "Match header text color",
-        "info": "Icon inherits whatever text color the header itself is using at that spot, instead of a fixed color/gradient. Only a plain color - a gradient can't be matched.",
+        "label": "Match header text color (icon)",
+        "info": "Icon color matches your header text instead of a fixed color. Works with solid colors only, not gradients.",
         "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
@@ -1959,6 +1965,17 @@
         "id": "shopflo_account_button_background_button_c",
         "label": "Background color",
         "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "shopflo_account_icon_size_button_c",
+        "label": "Icon size",
+        "min": 16,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20,
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
@@ -1992,6 +2009,13 @@
         "step": 1,
         "unit": "px",
         "default": 8,
+        "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "shopflo_account_full_width_button_c",
+        "label": "Full width",
+        "default": false,
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
