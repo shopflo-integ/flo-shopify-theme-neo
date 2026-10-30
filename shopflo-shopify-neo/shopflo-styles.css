@@ -1008,3 +1008,9 @@
 body:has([data-flo-state="login-icon"][data-flo-visible=false]) #flo-marketing-popup-wrapper {
     display: none;
 }
+#shopflo-accounts-hidden-root {
+    visibility: hidden;
+    height: 0px !important;
+    width: 0px !important;
+    position: absolute !important;
+}
