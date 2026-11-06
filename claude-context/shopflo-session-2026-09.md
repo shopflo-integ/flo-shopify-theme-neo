@@ -141,7 +141,7 @@ by the user): swapped it for `window.handleDrawer()`.** `handleDrawer()` is a TO
 the header icon, not a dedicated "open account management" call - firing it from an
 already-open drawer's own item risks putting the bundle in the wrong state. **Reverted back to
 `handleShopifyLogin(event, '/account')`**, which matches the exact signature the bundle's own
-dummy `shop_pass_bundle_markup` reference link uses, so it isn't a misuse on this theme's part.
+dummy `shopflo_bundle_markup` (formerly `shop_pass_bundle_markup`) reference link uses, so it isn't a misuse on this theme's part.
 If the redirect-vs-overlay behavior itself needs to change, that decision happens inside the
 external bundle script, not this repo - raise it with Shopflo directly rather than trying another
 client-side function swap.
@@ -1318,3 +1318,39 @@ extra no-op pass - never loops.
    and both `shopflo-popup-trigger`/`shopflo-buy-now__button` were back, WHILE the hijacker's own
    classes (`shopify-payment-button__button`, `--unbranded`, a fake `some-theme-class`) were still
    present too - confirms the restore is additive/non-destructive, not a wholesale revert.
+
+---
+
+## 33. Renamed `shop_pass_bundle_markup` → `shopflo_bundle_markup`, now rendered unconditionally
+
+**Why**: the old name and docs said to render the hidden bundle markup only on themes that use a
+`shop_pass_*` instance. That was wrong - the Shopflo bundle runs its own init (the
+getElementById/onclick lookups that define `window.handleDrawer` / `window.handleShopifyLogin`)
+on EVERY page, whether or not the theme shows a Shop Pass button. So the markup is a bundle
+requirement, not a Shop Pass one, and the name now says that.
+
+**Changes** (in both `snippets/shopflo.liquid` and `shopflo-shopify-neo/shopflo.liquid`):
+- `{% when 'shop_pass_bundle_markup' %}` → `{% when 'shopflo_bundle_markup' %}`.
+- Integration step 4, the `@param type` description and the `@example` now say "always render
+  once, anywhere in `<body>`, on every page" - the "skip it if no shop_pass_*" wording is gone.
+- Call site in `layout/theme.liquid` updated to `type: 'shopflo_bundle_markup'`.
+
+**Breaking for other themes**: there is no alias for the old name. A theme still calling
+`type: 'shop_pass_bundle_markup'` hits no `when` branch and silently renders nothing, which brings
+back the "globals never defined" failure. Update every call site when rolling this snippet out.
+
+---
+
+## 34. Keyboard focus ring restored on the Checkout / Buy Now buttons
+
+**Problem**: `.shopflo-checkout__button` and `.shopflo-buy-now__button` set
+`outline: none !important` to hide the browser's default ring on mouse clicks - which also hid it
+for keyboard users, so tabbing to either button gave no visible focus (accessibility issue).
+
+**Fix** (both `assets/shopflo-styles.css` and `shopflo-shopify-neo/shopflo-styles.css`, right
+after the `outline: none` rule, using the same 4x `.shopflo-scope` hardening as §31):
+`:focus-visible` → `outline: 2px solid CanvasText !important; outline-offset: 2px !important;`.
+`:focus-visible` only matches keyboard (and other non-pointer) focus, so mouse clicks still show
+no ring. `CanvasText` is the page's own system text color, and because of the 2px offset the ring
+sits on the page background rather than on the button - so it contrasts whatever the button's own
+configured background color is.

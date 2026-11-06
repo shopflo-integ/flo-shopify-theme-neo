@@ -387,7 +387,7 @@
         "type": "select",
         "id": "shopflo_hover_effect_checkout",
         "label": "Hover effect",
-        "default": "scale",
+        "default": "none",
         "options": [
           {
             "value": "none",
@@ -949,7 +949,7 @@
         "type": "select",
         "id": "shopflo_hover_effect_buy_now",
         "label": "Hover effect",
-        "default": "scale",
+        "default": "none",
         "options": [
           {
             "value": "none",

@@ -63,15 +63,16 @@
        deliberately does NOT carry it, since navigating to the account view SHOULD close the mobile
        nav drawer around it.
 
-    4. IF YOU RENDER ANY shop_pass_primary/shop_pass_secondary/shop_pass_tertiary, ALSO RENDER
-       `{% render 'shopflo', type: 'shop_pass_bundle_markup' %}` ONCE, ANYWHERE IN <body>.
+    4. ALWAYS RENDER `{% render 'shopflo', type: 'shopflo_bundle_markup' %}` ONCE, ANYWHERE IN
+       <body> - unconditionally, on every page, whether or not this theme renders any shop_pass_*
+       instance.
        This is dummy, permanently-hidden markup that exists PURELY to satisfy the Shopflo bundle
        script's OWN internal getElementById/onclick lookups - the bundle silently fails its own
        initialization (never defining window.handleDrawer / window.handleShopifyLogin) without it,
        which breaks every shop_pass_primary/secondary/tertiary instance too, since they call those
        same globals. shop_pass_primary/secondary/tertiary themselves do NOT read from or forward
-       clicks to this markup - only the bundle does. Skip this step entirely if you're not
-       rendering any shop_pass_* instance on this theme.
+       clicks to this markup - only the bundle does. Don't gate it on shop_pass_* usage: the
+       bundle runs its init on every page regardless.
 
     5. KEEP THE CART COUNT BADGE IN SYNC - see "CART COUNT SYNC" below.
 
@@ -221,7 +222,7 @@
       document.addEventListener('shopflo-event:cart-opened', () => myOtherPopup.close());
       document.addEventListener('shopflo-event:account-drawer-opened', () => myModal.close());
 
-    @param {string} type - Which piece to render: 'assets' (svg defs/styles/scripts + shared popup markup, default), 'checkout' (checkout button), 'buy_now' (buy-now button), 'shop_pass_primary', 'shop_pass_secondary', or 'shop_pass_tertiary' (account login icon/drawer proxy, independently styled per slot, each self-hiding per its own "Visible on" setting - see <shopflo-accounts> in assets/shopflo-script.js), or 'shop_pass_bundle_markup' (dummy hidden markup the Shopflo bundle script itself needs to initialize correctly - required, once anywhere in <body>, whenever you render any shop_pass_* instance).
+    @param {string} type - Which piece to render: 'assets' (svg defs/styles/scripts + shared popup markup, default), 'checkout' (checkout button), 'buy_now' (buy-now button), 'shop_pass_primary', 'shop_pass_secondary', or 'shop_pass_tertiary' (account login icon/drawer proxy, independently styled per slot, each self-hiding per its own "Visible on" setting - see <shopflo-accounts> in assets/shopflo-script.js), or 'shopflo_bundle_markup' (dummy hidden markup the Shopflo bundle script itself needs to initialize correctly - always required, rendered unconditionally once anywhere in <body>).
     @param {string} [extra_class] - checkout/buy_now/shop_pass_primary/shop_pass_secondary/shop_pass_tertiary only. Extra CSS class(es) appended as-is (space-separated) to this render's own root wrapper element - `.shopflo-checkout__wrapper` for 'checkout', `.shopflo-buy-now__wrapper` for 'buy_now', or `<shopflo-accounts>` itself for the shop_pass_* types - on top of its existing default classes, not instead of them. Useful for a one-off layout hook (e.g. a caller-specific spacing utility) without needing a new Theme Editor setting or touching assets/shopflo-styles.css. No-op (silently ignored) for any other `type`.
     @param {boolean} [shopflo_badge] - Checkout/buy_now only. Shows the "Powered by Shopflo" badge on the button. Defaults to true. Pass `false` explicitly to hide - NOT read via the `| default:` filter, since that would silently treat an explicit `false` the same as "not passed".
     @param {boolean} [shopflo_payment_icons] - Checkout/buy_now only. Master show/hide for the payment icons row, on top of (not instead of) the existing Theme Editor settings - Theme Editor > Shopflo Checkout/Buy Now > Show payment icons, icon 1/2/3 pickers, position, etc. all still apply exactly as before; this just lets a caller force the row off for one particular render (e.g. a compact cart-drawer instance) without touching those settings. Defaults to true. Pass `false` explicitly to hide - like `show_user_icon` below, NOT read via the `| default:` filter, since that would silently treat an explicit `false` the same as "not passed".
@@ -256,10 +257,9 @@
   {% render 'shopflo', type: 'shop_pass_secondary' %}
   {% render 'shopflo', type: 'shop_pass_tertiary' %}
     @example
-    Required exactly once, anywhere in <body>, on any page/layout that renders shop_pass_primary/
-    shop_pass_secondary/shop_pass_tertiary - typically alongside `type: 'assets'` in
-    layout/theme.liquid. Skip it entirely if this theme never renders a shop_pass_* instance:
-  {% render 'shopflo', type: 'shop_pass_bundle_markup' %}
+    Required exactly once, anywhere in <body>, on every page - rendered unconditionally,
+    typically alongside `type: 'assets'` in layout/theme.liquid:
+  {% render 'shopflo', type: 'shopflo_bundle_markup' %}
     @example
     Tag a cart icon's count badge for live sync:
   <a href="{{ routes.cart_url }}" id="cart-icon-bubble" class="header__icon header__icon--cart">
@@ -712,7 +712,7 @@
       };
     </script>
 
-  {% when 'shop_pass_bundle_markup' %}
+  {% when 'shopflo_bundle_markup' %}
     <div
       id="shopflo-accounts-hidden-root"
       class="shopflo-accounts-hidden header--icon header--icon--mobile"
