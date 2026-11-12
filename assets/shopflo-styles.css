@@ -32,263 +32,6 @@
     text-align: right !important;
     justify-content: right !important;
 }
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-shadow--soft), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-shadow--soft {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-shadow--medium), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-shadow--medium {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-shadow--strong), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-shadow--strong {
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button:hover:not([disabled])), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button:hover:not([disabled]) {
-    background:
-        var(--sf-checkout-hover-background-img, var(--sf-checkout-background-img)) padding-box,
-        var(--sf-checkout-hover-border-color, var(--sf-checkout-border-color)) border-box !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button:hover:not([disabled])), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button:hover:not([disabled]) {
-    background:
-        var(--sf-buy-now-hover-background-img, var(--sf-buy-now-background-img)) padding-box,
-        var(--sf-buy-now-hover-border-color, var(--sf-buy-now-border-color)) border-box !important;
-}
-
-/* The label's text color is painted via `background` + `background-clip: text` (see
-   .shopflo-checkout__button--label/.shopflo-buy-now__button--label further below - needed since
-   this setting supports gradients, which plain `color`/currentColor can't hold), so the button's
-   own :hover rule above - which only repaints the BUTTON's background - never touched it: without
-   this, a hover background dark enough to clash with the (unchanged) text color could make the
-   label unreadable during hover. --sf-checkout-hover-color/--sf-buy-now-hover-color fall back to
-   the base (non-hover) text color when unset, so this is a no-op until a merchant opts in via
-   Theme Editor > Shopflo Checkout/Buy Now > Hover text color.
-
-   The `background-clip`/`-webkit-text-fill-color`/`color` redeclarations below are REQUIRED, not
-   defensive filler: the `background` shorthand implicitly resets `background-clip` (and every
-   other background-* sub-property not named in its own value) to its initial `border-box` on
-   ANY element it's applied to - including here, where it's re-declared at higher specificity than
-   the base label rule below. Without repeating them, this rule silently un-clips the label's
-   background-painted text on hover, so it renders as a solid box (often unreadably light/white)
-   instead of clipping to the glyphs - hit and fixed 2026-09-29, keep these four lines whenever
-   this hover rule is touched. */
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button:hover:not([disabled]) .shopflo-checkout__button--label), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button:hover:not([disabled]) .shopflo-checkout__button--label {
-    background: var(--sf-checkout-hover-color, var(--sf-checkout-color)) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    color: transparent !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button:hover:not([disabled]) .shopflo-buy-now__button--label), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button:hover:not([disabled]) .shopflo-buy-now__button--label {
-    background: var(--sf-buy-now-hover-color, var(--sf-buy-now-color)) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    color: transparent !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-hover--lift:hover:not([disabled])), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-hover--lift:hover:not([disabled]) {
-    transform: translateY(-2px) !important;
-    box-shadow: -1px 4px 8px 1px rgba(0, 0, 0, 0.22) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-hover--scale:hover:not([disabled])), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-hover--scale:hover:not([disabled]) {
-    transform: scale(1.02) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-hover--shine)::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-hover--shine::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: inherit !important;
-    pointer-events: none !important;
-    background: linear-gradient(115deg,
-            transparent 38%,
-            rgba(255, 255, 255, 0.45) 50%,
-            transparent 62%) !important;
-    background-size: 250% 100% !important;
-    background-position: 150% 0 !important;
-    transition: background-position 0.6s ease !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-hover--shine:hover:not([disabled]))::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-hover--shine:hover:not([disabled])::after {
-    background-position: -120% 0 !important;
-}
-
-/* Darken/Lighten paint onto a ::before layer BEHIND the button's real content (z-index: -1,
-   see below) instead of using `filter` directly on the button itself - a plain `filter` on the
-   button would darken/lighten literally everything inside it, including the label (painted via
-   `background` + `background-clip: text`) and payment icons, coupling this effect to Hover text
-   color/icon colors even though those are independent settings. Still uses `filter`, not
-   color-mix()/a computed darker color, because the background can be a GRADIENT
-   (color_background setting) - color-mix() only accepts real <color> values, not gradients, so
-   filter is the only technique that darkens/lightens correctly regardless of solid vs gradient.
-   Each button type needs its own pair since the underlying background custom properties differ
-   (--sf-checkout-* vs --sf-buy-now-*). Deliberately NOT extended to also cover the button's own
-   border ring (inset: 0 sits at the padding edge, inside the border) - a minor, accepted
-   trade-off to keep this simple; the border color itself doesn't darken/lighten on hover. */
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled])::before,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled])::before,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled])::before,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled])::before {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: inherit !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled])::before {
-    background:
-        var(--sf-checkout-hover-background-img, var(--sf-checkout-background-img)) padding-box,
-        var(--sf-checkout-border-color) border-box !important;
-    filter: brightness(0.9) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled])::before {
-    background:
-        var(--sf-checkout-hover-background-img, var(--sf-checkout-background-img)) padding-box,
-        var(--sf-checkout-border-color) border-box !important;
-    filter: brightness(1.12) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled])::before {
-    background:
-        var(--sf-buy-now-hover-background-img, var(--sf-buy-now-background-img)) padding-box,
-        var(--sf-buy-now-border-color) border-box !important;
-    filter: brightness(0.9) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled]))::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled])::before {
-    background:
-        var(--sf-buy-now-hover-background-img, var(--sf-buy-now-background-img)) padding-box,
-        var(--sf-buy-now-border-color) border-box !important;
-    filter: brightness(1.12) !important;
-}
-
-@keyframes sf-swipe {
-    0% {
-        background-position: 170% 0;
-    }
-
-    55%,
-    100% {
-        background-position: -70% 0;
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--swipe)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--swipe::before {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: inherit !important;
-    pointer-events: none !important;
-    background: linear-gradient(100deg,
-            transparent 30%,
-            #6c5ce7 48%,
-            #6c5ce7 52%,
-            transparent 70%) !important;
-    background-size: 220% 100% !important;
-    animation: sf-swipe 2.6s cubic-bezier(0.6, 0, 0.3, 1) infinite !important;
-}
-
-@keyframes sf-stripes {
-    from {
-        background-position: 0 0;
-    }
-
-    to {
-        background-position: 44px 0;
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--stripes)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--stripes::before {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: inherit !important;
-    pointer-events: none !important;
-    background: repeating-linear-gradient(115deg,
-            transparent 0 11px,
-            #6c5ce7 11px 22px) !important;
-    background-size: 200% 100% !important;
-    animation: sf-stripes 1.5s linear infinite !important;
-}
-
-@keyframes sf-pulse {
-
-    0%,
-    100% {
-        transform: none;
-    }
-
-    50% {
-        transform: scale(1.02);
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--pulse), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--pulse {
-    animation: sf-pulse 1.8s ease-in-out infinite !important;
-}
-
-@keyframes sf-bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translateY(0);
-    }
-
-    40% {
-        transform: translateY(-5px);
-    }
-
-    60% {
-        transform: translateY(-2px);
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--bounce), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--bounce {
-    animation: sf-bounce 2.2s ease infinite !important;
-}
-
-@keyframes sf-float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-3px);
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--float), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--float {
-    animation: sf-float 3s ease-in-out infinite !important;
-}
-
-@keyframes sf-breathe {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.82;
-    }
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-button-animation--breathe), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-button-animation--breathe {
-    animation: sf-breathe 2.4s ease-in-out infinite !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-button)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-button::before,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-button)::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-button::after,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is([class*="sf-button-animation--"]), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope [class*="sf-button-animation--"] {
-        transition: none !important;
-        animation: none !important;
-        transform: none !important;
-    }
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf--animation-swipe)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf--animation-swipe::before,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf--animation-stripes)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf--animation-stripes::before {
-        display: none !important;
-    }
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf--hover-chevrons:hover .shopflo-main), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf--hover-chevrons:hover .shopflo-main,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf--hover-chevrons:hover .shopflo-badge), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf--hover-chevrons:hover .shopflo-badge {
-        opacity: 1 !important;
-    }
-}
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper {
     display: flex !important;
     flex-direction: column !important;
@@ -345,21 +88,32 @@
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--separate), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--separate {
     gap: var(--shopflo-checkout-promo-gap) !important;
 }
+/* Attached layout = promo banner (top corners) + button (bottom corners), each rounded on its
+   own. A browser scales a radius down to fit the element, so with a Corner radius bigger than the
+   (short) promo banner, the banner's top corners shrank to its height while the button's bottom
+   corners stayed larger - an unsymmetrical shape (reported 2026-11-12). Cap the radius at the
+   promo banner's REAL rendered height so all four outer corners always get the same curve:
+   the promo text's <p> is pinned to height = promo font size (see `.shopflo-*--promo__text p`
+   further below - its 2.1x line-height does NOT count, the <p> is a block), plus vertical
+   padding: 0.4rem top+bottom on the checkout promo container, 0.2rem top+bottom on the buy-now
+   promo text span. Keep these formulas in sync if that padding/height ever changes. */
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached {
     backface-visibility: hidden !important;
+    --sf-checkout-attached-radius: min(var(--sf-checkout-border-radius), calc(var(--shopflo-checkout-promo-font-size) + 0.8rem));
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached {
     backface-visibility: hidden !important;
+    --sf-buy-now-attached-radius: min(var(--sf-buy-now-border-radius), calc(var(--shopflo-buy-now-promo-font-size) + 0.4rem));
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button {
-    border-radius: 0 0 var(--sf-checkout-border-radius) var(--sf-checkout-border-radius) !important;
+    border-radius: 0 0 var(--sf-checkout-attached-radius) var(--sf-checkout-attached-radius) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper:not(.sf-promo-banner__layout--attached) .shopflo-checkout__button,
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--separate .shopflo-checkout__button {
     border-radius: var(--sf-checkout-border-radius) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout--promo {
-    border-radius: var(--sf-checkout-border-radius) var(--sf-checkout-border-radius) 0 0 !important;
+    border-radius: var(--sf-checkout-attached-radius) var(--sf-checkout-attached-radius) 0 0 !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--separate .shopflo-checkout--promo {
     border-radius: var(--shopflo-checkout-promo-border-radius) !important;
@@ -389,14 +143,14 @@
     outline: none !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button {
-    border-radius: 0 0 var(--sf-buy-now-border-radius) var(--sf-buy-now-border-radius) !important;
+    border-radius: 0 0 var(--sf-buy-now-attached-radius) var(--sf-buy-now-attached-radius) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper:not(.sf-promo-banner__layout--attached) .shopflo-buy-now__button,
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--separate .shopflo-buy-now__button {
     border-radius: var(--sf-buy-now-border-radius) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now--promo {
-    border-radius: var(--sf-buy-now-border-radius) var(--sf-buy-now-border-radius) 0 0 !important;
+    border-radius: var(--sf-buy-now-attached-radius) var(--sf-buy-now-attached-radius) 0 0 !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--separate .shopflo-buy-now--promo {
     border-radius: var(--shopflo-buy-now-promo-border-radius) !important;
@@ -406,14 +160,14 @@
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button .shopflo-checkout--promo), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button .shopflo-checkout--promo {
     position: absolute !important;
-    z-index: 1 !important;
+    z-index: 2 !important;
     width: auto !important;
     max-width: calc(100% - 0.8rem) !important;
     border-radius: var(--shopflo-checkout-promo-border-radius) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-buy-now--promo), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-buy-now--promo {
     position: absolute !important;
-    z-index: 1 !important;
+    z-index: 2 !important;
     width: auto !important;
     max-width: calc(100% - 0.8rem) !important;
     border-radius: var(--shopflo-buy-now-promo-border-radius) !important;
@@ -441,80 +195,6 @@
     bottom: -0.6rem !important;
     right: 0.6rem !important;
 }
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button.sf-button-hover--lift:hover:not([disabled]),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button.sf-button-hover--lift:hover:not([disabled]) {
-    transform: none !important;
-    box-shadow: none !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button.sf-button-hover--scale:hover:not([disabled]),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button.sf-button-hover--scale:hover:not([disabled]) {
-    transform: none !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled]),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled]) {
-    filter: none !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled]),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled]) {
-    filter: none !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-checkout__wrapper.sf-promo-banner__layout--attached .shopflo-checkout__button.sf-button-hover--shine::after,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached .shopflo-buy-now__button.sf-button-hover--shine::after {
-    display: none !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--lift:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--lift:hover:not([disabled])),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--lift:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--lift:hover:not([disabled])) {
-    transform: translateY(-2px) !important;
-    box-shadow: -1px 4px 8px 1px rgba(0, 0, 0, 0.22) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--scale:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--scale:hover:not([disabled])),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--scale:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--scale:hover:not([disabled])) {
-    transform: scale(1.02) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--darken:hover:not([disabled])),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--darken:hover:not([disabled])) {
-    filter: brightness(0.9) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--lighten:hover:not([disabled])),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled]))), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--lighten:hover:not([disabled])) {
-    filter: brightness(1.12) !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine),
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine) {
-    position: relative !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine))::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine)::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: var(--sf-checkout-border-radius) !important;
-    pointer-events: none !important;
-    background: linear-gradient(115deg,
-            transparent 38%,
-            rgba(255, 255, 255, 0.45) 50%,
-            transparent 62%) !important;
-    background-size: 250% 100% !important;
-    background-position: 150% 0 !important;
-    transition: background-position 0.6s ease !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine))::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine)::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: var(--sf-buy-now-border-radius) !important;
-    pointer-events: none !important;
-    background: linear-gradient(115deg,
-            transparent 38%,
-            rgba(255, 255, 255, 0.45) 50%,
-            transparent 62%) !important;
-    background-size: 250% 100% !important;
-    background-position: 150% 0 !important;
-    transition: background-position 0.6s ease !important;
-}
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine:hover:not([disabled])))::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__wrapper.sf-promo-banner__layout--attached:has(.shopflo-checkout__button.sf-button-hover--shine:hover:not([disabled]))::after,
-.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine:hover:not([disabled])))::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper.sf-promo-banner__layout--attached:has(.shopflo-buy-now__button.sf-button-hover--shine:hover:not([disabled]))::after {
-    background-position: -120% 0 !important;
-}
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__wrapper), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__wrapper {
     display: flex !important;
     flex-direction: column !important;
@@ -527,6 +207,25 @@
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button:disabled), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button:disabled {
     cursor: not-allowed !important;
     opacity: 0.6 !important;
+}
+/* Host themes often style their own button pseudo-elements with the THEME's radius, e.g. Dawn's
+   .shopify-payment-button__button--unbranded:before/:after (the Buy Now button carries that class
+   for Shopify payment-button compatibility) draw a shadow/border ring with
+   var(--buttons-radius-outset)/var(--buttons-radius). Without this, that ring's corners don't
+   match Shopflo's own Corner radius setting. `inherit` (not a fixed var) so it also follows the
+   top-only/bottom-only radius the button gets in the attached promo-banner layouts. */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button::before,
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button)::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button::after,
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button)::before, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button::before {
+    border-radius: inherit !important;
+}
+/* `border-radius: inherit` wasn't enough for Buy Now's ::after - Dawn's
+   .shopify-payment-button__button--unbranded:after (the button carries that class) is a
+   border RING inset by --buttons-border-width and painted with box-shadow, so its corners
+   never lined up with Shopflo's own border/radius. Shopflo draws its own border, so drop the
+   host theme's ring entirely. */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button)::after, .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button::after {
+    content: none !important;
 }
 #shopify-buy-now__button--wrapper {
     display: none;
@@ -543,6 +242,9 @@
     align-items: center !important;
     gap: 1px !important;
     flex-basis: 15% !important;
+    /* Keeps the per-icon z-index below local to the icon row, so it can't lift icons above the
+       promo banner (z-index: 2) or anything else in the button. */
+    isolation: isolate !important;
     max-width: calc((var(--sf-checkout-height) * 2) - (var(--sf-payment-icon-overlap_checkout) * 2)) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-icon), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-icon {
@@ -559,8 +261,21 @@
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-icon[class*="shopflo-payment-icon--"]), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-icon[class*="shopflo-payment-icon--"] {
     position: relative !important;
+}
+/* Payment icons AND the "Powered by Shopflo" shield badge share one size per button type, so the
+   badge always matches the payment icons next to it: Theme Editor > Shopflo Checkout/Buy Now >
+   Icon size, capped by that button's own height minus its vertical padding. Buy Now reads its own
+   --sf-buy-now-payment-icon-size (which already resolves "Match Checkout payment icons" in
+   snippets/shopflo.liquid) and its own height/padding, not Checkout's. */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button .shopflo-icon[class*="shopflo-payment-icon--"]), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button .shopflo-icon[class*="shopflo-payment-icon--"],
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button .shopflo-badge-icon--shield), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button .shopflo-badge-icon--shield {
     width: calc(min(var(--sf-checkout-height) - calc(var(--sf-checkout-padding-block) * 1.5), var(--sf-payment-icon-size))) !important;
     height: calc(min(var(--sf-checkout-height) - calc(var(--sf-checkout-padding-block) * 1.5), var(--sf-payment-icon-size))) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-icon[class*="shopflo-payment-icon--"]), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-icon[class*="shopflo-payment-icon--"],
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-badge-icon--shield), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-badge-icon--shield {
+    width: calc(min(var(--sf-buy-now-height) - calc(var(--sf-buy-now-padding-block) * 1.5), var(--sf-buy-now-payment-icon-size))) !important;
+    height: calc(min(var(--sf-buy-now-height) - calc(var(--sf-buy-now-padding-block) * 1.5), var(--sf-buy-now-payment-icon-size))) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button .shopflo-icon[class*="shopflo-payment-icon--"]), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button .shopflo-icon[class*="shopflo-payment-icon--"] {
     max-height: calc(var(--sf-checkout-height) - calc(var(--sf-checkout-padding-block))) !important;
@@ -599,30 +314,80 @@
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right {
     flex-direction: row-reverse !important;
 }
+/* UPI Icon position = Right reverses the overlap stacking: by default (Left) later icons paint on
+   top (icon 1 under icon 2 under icon 3); on Right, icon 1 sits on top of icon 2, which sits on
+   top of icon 3. Icons are already position: relative (see the payment-icon rule above). */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1) {
+    z-index: 3 !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2) {
+    z-index: 2 !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3) {
+    z-index: 1 !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1) {
+    z-index: 3 !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2) {
+    z-index: 2 !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3) {
+    z-index: 1 !important;
+}
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1) {
-    background: var(--sf-payment-icon-background_checkout_1) !important;
+    background: var(--sf-payment-icon-background_checkout) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2) {
-    background: var(--sf-payment-icon-background_checkout_2) !important;
+    background: var(--sf-payment-icon-background_checkout) !important;
     left: calc(var(--sf-payment-icon-overlap_checkout) * -1) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3) {
-    background: var(--sf-payment-icon-background_checkout_3) !important;
+    background: var(--sf-payment-icon-background_checkout) !important;
     left: calc(var(--sf-payment-icon-overlap_checkout) * -2) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-payment-icons__wrapper), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-payment-icons__wrapper {
     max-width: calc((var(--sf-buy-now-height) * 2) - (var(--sf-buy-now-payment-icon-overlap) * 2)) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(1) {
-    background: var(--sf-buy-now-payment-icon-background-1) !important;
+    background: var(--sf-buy-now-payment-icon-background) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(2) {
-    background: var(--sf-buy-now-payment-icon-background-2) !important;
+    background: var(--sf-buy-now-payment-icon-background) !important;
     left: calc(var(--sf-buy-now-payment-icon-overlap) * -1) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button .shopflo-payment-icons__wrapper .shopflo-icon:nth-child(3) {
-    background: var(--sf-buy-now-payment-icon-background-3) !important;
+    background: var(--sf-buy-now-payment-icon-background) !important;
     left: calc(var(--sf-buy-now-payment-icon-overlap) * -2) !important;
+}
+/* UPI Icon position = Right mirrors the Left packing. On Left, icons 2/3 are pulled LEFT by
+   1x/2x the overlap (rules above), so the row packs against the left side. On Right, pull them
+   RIGHT instead: the last icon stays put and each earlier one shifts right by 1x/2x the overlap.
+   Uses nth-last-child, so it also packs correctly when only 1-2 of the 3 icons are picked. The
+   checkout wrapper/label spacing adjustments mirror the Left ones (margin-left -> margin-right). */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(1) {
+    left: 0px !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(2) {
+    left: calc(var(--sf-payment-icon-overlap_checkout)) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(3) {
+    left: calc(var(--sf-payment-icon-overlap_checkout) * 2) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(1)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(1) {
+    left: 0px !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(2)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(2) {
+    left: calc(var(--sf-buy-now-payment-icon-overlap)) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(3)), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-buy-now-payment-icon--right .shopflo-payment-icons__wrapper .shopflo-icon:nth-last-child(3) {
+    left: calc(var(--sf-buy-now-payment-icon-overlap) * 2) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-payment-icons__wrapper {
+    margin-right: calc(var(--sf-payment-icon-overlap_checkout)) !important;
+}
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.sf-checkout-payment-icon--right .shopflo-checkout__button--label), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .sf-checkout-payment-icon--right .shopflo-checkout__button--label {
+    margin-right: calc(var(--sf-payment-icon-overlap_checkout) * -3) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button--content), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button--content {
     display: flex !important;
@@ -663,15 +428,13 @@
     min-width: fit-content !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-badge-icon--shield), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-badge-icon--shield {
-    flex-basis: 15% !important;
-    height: 100% !important;
-    min-height: 2rem !important;
+    flex: 0 0 auto !important;
+    justify-content: center !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-svg--badge), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-svg--badge {
     display: block !important;
     height: 100% !important;
-    max-width: 100% !important;
-    width: unset !important;
+    width: 100% !important;
     /* The badge shield/checkmark are painted entirely in translucent-to-solid
        WHITE (see the gradient <defs> inline in snippets/shopflo.liquid) - by
        design, for a "glassy seal" look on a colored/dark checkout button. The
@@ -681,6 +444,13 @@
        This CSS-level shadow is the actual fix: visible on light backgrounds,
        still subtle enough not to look out of place on dark/colored ones. */
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 2px rgba(0, 0, 0, 0.25)) !important;
+}
+/* Theme Editor > Shopflo Checkout/Buy Now > Button Icons > Badge shade = Dark: a solid black outline
+   instead of the soft shadow above, for light/white button backgrounds where the white badge
+   needs a stronger edge. Light keeps the default filter above unchanged. */
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-badge-shade--dark .shopflo-svg--badge), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-badge-shade--dark .shopflo-svg--badge,
+.shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-buy-now__button.sf-badge-shade--dark .shopflo-svg--badge), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-buy-now__button.sf-badge-shade--dark .shopflo-svg--badge {
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 1)) drop-shadow(0 0 2px rgba(0, 0, 0, 1)) !important;
 }
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-label-squeezed .shopflo-payment-icons__wrapper), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-label-squeezed .shopflo-payment-icons__wrapper,
 .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope:is(.shopflo-checkout__button.sf-label-squeezed .shopflo-badge-icon--shield), .shopflo-scope.shopflo-scope.shopflo-scope.shopflo-scope .shopflo-checkout__button.sf-label-squeezed .shopflo-badge-icon--shield,

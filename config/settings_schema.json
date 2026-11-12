@@ -1600,10 +1600,6 @@
     "name": "Shopflo Checkout",
     "settings": [
       {
-        "type": "header",
-        "content": "Button Labels"
-      },
-      {
         "type": "text",
         "id": "shopflo_button_label_checkout",
         "label": "Checkout label",
@@ -1627,14 +1623,14 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 55
+        "default": 50
       },
       {
         "type": "range",
         "id": "shopflo_button_padding_block_checkout",
         "label": "Vertical padding",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 10
@@ -1644,7 +1640,7 @@
         "id": "shopflo_button_padding_inline_checkout",
         "label": "Horizontal padding",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 10
@@ -1654,10 +1650,20 @@
         "id": "shopflo_font_size_checkout",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 15
+      },
+      {
+        "type": "range",
+        "id": "shopflo_letter_spacing_checkout",
+        "label": "Letter spacing",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 1
       },
       {
         "type": "select",
@@ -1676,16 +1682,6 @@
         ]
       },
       {
-        "type": "range",
-        "id": "shopflo_letter_spacing_checkout",
-        "label": "Letter spacing",
-        "min": 0,
-        "max": 15,
-        "step": 1,
-        "unit": "px",
-        "default": 1
-      },
-      {
         "type": "text_alignment",
         "id": "shopflo_label_alignment_checkout",
         "label": "Label alignment",
@@ -1699,26 +1695,26 @@
         "type": "color_background",
         "id": "shopflo_background_color_checkout",
         "label": "Background color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)"
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)"
       },
       {
         "type": "color_background",
         "id": "shopflo_text_color_checkout",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)"
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)"
       },
       {
         "type": "color_background",
         "id": "shopflo_border_color_checkout",
         "label": "Border color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)"
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)"
       },
       {
         "type": "range",
         "id": "shopflo_border_width_checkout",
         "label": "Border width",
         "min": 0,
-        "max": 10,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 1
@@ -1734,43 +1730,36 @@
         "default": 10
       },
       {
-        "type": "select",
-        "id": "shopflo_shadow_style_checkout",
-        "label": "Drop shadow",
-        "default": "medium",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "soft",
-            "label": "Soft"
-          },
-          {
-            "value": "medium",
-            "label": "Medium"
-          },
-          {
-            "value": "strong",
-            "label": "Strong"
-          }
-        ]
-      },
-      {
         "type": "header",
-        "content": "Checkout Payment Icons"
+        "content": "Checkout Button Icons"
       },
       {
         "type": "checkbox",
         "id": "shopflo_payment_icons_checkout",
-        "label": "Show payment icons",
+        "label": "Show icons",
         "default": true
       },
       {
         "type": "select",
+        "id": "shopflo_badge_shade_checkout",
+        "label": "Badge shade",
+        "default": "light",
+        "options": [
+          {
+            "value": "light",
+            "label": "Light"
+          },
+          {
+            "value": "dark",
+            "label": "Dark"
+          }
+        ],
+        "visible_if": "{{ settings.shopflo_payment_icons_checkout == true }}"
+      },
+      {
+        "type": "select",
         "id": "shopflo_payment_icon_position_checkout",
-        "label": "Icon position",
+        "label": "UPI Icon position",
         "default": "left",
         "options": [
           {
@@ -1787,7 +1776,7 @@
       {
         "type": "select",
         "id": "shopflo_payment_icon_checkout_1",
-        "label": "Icon 1",
+        "label": "UPI Icon 1",
         "default": "paytm",
         "options": [
           {
@@ -1822,16 +1811,9 @@
         "visible_if": "{{ settings.shopflo_payment_icons_checkout == true }}"
       },
       {
-        "type": "color",
-        "id": "shopflo_payment_icon_background_checkout_1",
-        "label": "Background color",
-        "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_payment_icons_checkout == true and settings.shopflo_payment_icon_checkout_1 != 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_payment_icon_checkout_2",
-        "label": "Icon 2",
+        "label": "UPI Icon 2",
         "default": "phonepe",
         "options": [
           {
@@ -1866,16 +1848,9 @@
         "visible_if": "{{ settings.shopflo_payment_icons_checkout == true }}"
       },
       {
-        "type": "color",
-        "id": "shopflo_payment_icon_background_checkout_2",
-        "label": "Background color",
-        "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_payment_icons_checkout == true and settings.shopflo_payment_icon_checkout_2 != 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_payment_icon_checkout_3",
-        "label": "Icon 3",
+        "label": "UPI Icon 3",
         "default": "googlepay",
         "options": [
           {
@@ -1911,17 +1886,17 @@
       },
       {
         "type": "color",
-        "id": "shopflo_payment_icon_background_checkout_3",
-        "label": "Background color",
+        "id": "shopflo_payment_icon_background_checkout",
+        "label": "UPI Icon background",
         "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_payment_icons_checkout == true and settings.shopflo_payment_icon_checkout_3 != 'none' }}"
+        "visible_if": "{{ settings.shopflo_payment_icons_checkout == true }}"
       },
       {
         "type": "range",
         "id": "shopflo_payment_icon_size_checkout",
-        "label": "Icon size",
+        "label": "UPI Icon size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 26,
@@ -1930,66 +1905,13 @@
       {
         "type": "range",
         "id": "shopflo_payment_icon_overlap_checkout",
-        "label": "Icon overlap",
+        "label": "UPI Icon overlap",
         "min": 0,
-        "max": 15,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 8,
         "visible_if": "{{ settings.shopflo_payment_icons_checkout == true }}"
-      },
-      {
-        "type": "header",
-        "content": "Checkout Button Animations"
-      },
-      {
-        "type": "select",
-        "id": "shopflo_hover_effect_checkout",
-        "label": "Hover effect",
-        "default": "scale",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "lift",
-            "label": "Lift"
-          },
-          {
-            "value": "scale",
-            "label": "Scale up"
-          },
-          {
-            "value": "shine",
-            "label": "Shine"
-          },
-          {
-            "value": "darken",
-            "label": "Darken"
-          },
-          {
-            "value": "lighten",
-            "label": "Lighten"
-          }
-        ]
-      },
-      {
-        "type": "color_background",
-        "id": "shopflo_hover_background_checkout",
-        "label": "Hover background"
-      },
-      {
-        "type": "color_background",
-        "id": "shopflo_hover_text_color_checkout",
-        "label": "Hover text color"
-      },
-      {
-        "type": "checkbox",
-        "id": "shopflo_hover_border_match_bg_checkout",
-        "label": "Match border color to hover background",
-        "info": "On hover, the button's border recolors to match the hover background instead of staying the base border color.",
-        "default": false
       },
       {
         "type": "header",
@@ -2051,7 +1973,7 @@
         "id": "shopflo_promo_font_size_checkout",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 16,
@@ -2079,14 +2001,14 @@
         "type": "color_background",
         "id": "shopflo_promo_background_checkout",
         "label": "Background color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)",
         "visible_if": "{{ settings.shopflo_promo_text_checkout != blank }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_promo_color_checkout",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_promo_text_checkout != blank }}"
       },
       {
@@ -2094,7 +2016,7 @@
         "id": "shopflo_promo_gap_checkout",
         "label": "Gap",
         "min": 1,
-        "max": 25,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 2,
@@ -2105,7 +2027,7 @@
         "id": "shopflo_promo_border_radius_checkout",
         "label": "Border Radius",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 0,
@@ -2117,18 +2039,10 @@
     "name": "Shopflo Buy Now",
     "settings": [
       {
-        "type": "header",
-        "content": "Button Labels"
-      },
-      {
         "type": "text",
         "id": "shopflo_button_label_buy_now",
         "label": "Buy now label",
         "default": "Buy it now"
-      },
-      {
-        "type": "header",
-        "content": "Buy Now Button Layout"
       },
       {
         "type": "select",
@@ -2145,6 +2059,10 @@
             "label": "Hide button"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Buy Now Button Layout"
       },
       {
         "type": "checkbox",
@@ -2167,7 +2085,7 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 55,
+        "default": 50,
         "visible_if": "{{ settings.shopflo_match_checkout_layout_buy_now == false }}"
       },
       {
@@ -2175,7 +2093,7 @@
         "id": "shopflo_button_padding_block_buy_now",
         "label": "Vertical padding",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 10,
@@ -2186,7 +2104,7 @@
         "id": "shopflo_button_padding_inline_buy_now",
         "label": "Horizontal padding",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 10,
@@ -2197,17 +2115,10 @@
         "id": "shopflo_font_size_buy_now",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 15,
-        "visible_if": "{{ settings.shopflo_match_checkout_layout_buy_now == false }}"
-      },
-      {
-        "type": "checkbox",
-        "id": "shopflo_bold_text_buy_now",
-        "label": "Bold text",
-        "default": true,
         "visible_if": "{{ settings.shopflo_match_checkout_layout_buy_now == false }}"
       },
       {
@@ -2215,10 +2126,27 @@
         "id": "shopflo_letter_spacing_buy_now",
         "label": "Letter spacing",
         "min": 0,
-        "max": 10,
+        "max": 20,
         "step": 1,
         "unit": "px",
         "default": 0,
+        "visible_if": "{{ settings.shopflo_match_checkout_layout_buy_now == false }}"
+      },
+      {
+        "type": "select",
+        "id": "shopflo_font_weight_buy_now",
+        "label": "Font weight",
+        "default": "normal",
+        "options": [
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "normal",
+            "label": "Normal"
+          }
+        ],
         "visible_if": "{{ settings.shopflo_match_checkout_layout_buy_now == false }}"
       },
       {
@@ -2242,21 +2170,21 @@
         "type": "color_background",
         "id": "shopflo_background_color_buy_now",
         "label": "Background color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)",
         "visible_if": "{{ settings.shopflo_match_checkout_style_buy_now == false }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_text_color_buy_now",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_match_checkout_style_buy_now == false }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_border_color_buy_now",
         "label": "Border color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)",
         "visible_if": "{{ settings.shopflo_match_checkout_style_buy_now == false }}"
       },
       {
@@ -2264,7 +2192,7 @@
         "id": "shopflo_border_width_buy_now",
         "label": "Border width",
         "min": 0,
-        "max": 4,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 1,
@@ -2275,40 +2203,15 @@
         "id": "shopflo_corner_radius_buy_now",
         "label": "Corner radius",
         "min": 0,
-        "max": 40,
-        "step": 2,
+        "max": 100,
+        "step": 1,
         "unit": "px",
         "default": 10,
         "visible_if": "{{ settings.shopflo_match_checkout_style_buy_now == false }}"
       },
       {
-        "type": "select",
-        "id": "shopflo_shadow_style_buy_now",
-        "label": "Drop shadow",
-        "default": "medium",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "soft",
-            "label": "Soft"
-          },
-          {
-            "value": "medium",
-            "label": "Medium"
-          },
-          {
-            "value": "strong",
-            "label": "Strong"
-          }
-        ],
-        "visible_if": "{{ settings.shopflo_match_checkout_style_buy_now == false }}"
-      },
-      {
         "type": "header",
-        "content": "Buy Now Payment Icons"
+        "content": "Buy Now Button Icons"
       },
       {
         "type": "checkbox",
@@ -2319,14 +2222,31 @@
       {
         "type": "checkbox",
         "id": "shopflo_payment_icons_buy_now",
-        "label": "Show payment icons",
+        "label": "Show icons",
         "default": true,
         "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false }}"
       },
       {
         "type": "select",
+        "id": "shopflo_badge_shade_buy_now",
+        "label": "Badge shade",
+        "default": "light",
+        "options": [
+          {
+            "value": "light",
+            "label": "Light"
+          },
+          {
+            "value": "dark",
+            "label": "Dark"
+          }
+        ],
+        "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true }}"
+      },
+      {
+        "type": "select",
         "id": "shopflo_payment_icon_position_buy_now",
-        "label": "Icon position",
+        "label": "UPI Icon position",
         "default": "left",
         "options": [
           {
@@ -2343,7 +2263,7 @@
       {
         "type": "select",
         "id": "shopflo_payment_icon_1_buy_now",
-        "label": "Icon 1",
+        "label": "UPI Icon 1",
         "default": "paytm",
         "options": [
           {
@@ -2378,16 +2298,9 @@
         "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true }}"
       },
       {
-        "type": "color",
-        "id": "shopflo_payment_icon_background_buy_now_1",
-        "label": "Background color",
-        "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true and settings.shopflo_payment_icon_1_buy_now != 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_payment_icon_2_buy_now",
-        "label": "Icon 2",
+        "label": "UPI Icon 2",
         "default": "phonepe",
         "options": [
           {
@@ -2422,16 +2335,9 @@
         "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true }}"
       },
       {
-        "type": "color",
-        "id": "shopflo_payment_icon_background_buy_now_2",
-        "label": "Background color",
-        "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true and settings.shopflo_payment_icon_2_buy_now != 'none' }}"
-      },
-      {
         "type": "select",
         "id": "shopflo_payment_icon_3_buy_now",
-        "label": "Icon 3",
+        "label": "UPI Icon 3",
         "default": "googlepay",
         "options": [
           {
@@ -2467,17 +2373,17 @@
       },
       {
         "type": "color",
-        "id": "shopflo_payment_icon_background_buy_now_3",
-        "label": "Background color",
+        "id": "shopflo_payment_icon_background_buy_now",
+        "label": "UPI Icon background",
         "default": "#FFFFFF",
-        "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true and settings.shopflo_payment_icon_3_buy_now != 'none' }}"
+        "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true }}"
       },
       {
         "type": "range",
         "id": "shopflo_payment_icon_size_buy_now",
-        "label": "Icon size",
+        "label": "UPI Icon size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 26,
@@ -2486,76 +2392,13 @@
       {
         "type": "range",
         "id": "shopflo_payment_icon_overlap_buy_now",
-        "label": "Icon overlap",
+        "label": "UPI Icon overlap",
         "min": 0,
-        "max": 15,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 8,
         "visible_if": "{{ settings.shopflo_match_checkout_icon_buy_now == false and settings.shopflo_payment_icons_buy_now == true }}"
-      },
-      {
-        "type": "header",
-        "content": "Buy Now Button Animations"
-      },
-      {
-        "type": "checkbox",
-        "id": "shopflo_match_checkout_animation_buy_now",
-        "label": "Match Checkout button animations",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "shopflo_hover_effect_buy_now",
-        "label": "Hover effect",
-        "default": "scale",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "lift",
-            "label": "Lift"
-          },
-          {
-            "value": "scale",
-            "label": "Scale up"
-          },
-          {
-            "value": "shine",
-            "label": "Shine"
-          },
-          {
-            "value": "darken",
-            "label": "Darken"
-          },
-          {
-            "value": "lighten",
-            "label": "Lighten"
-          }
-        ],
-        "visible_if": "{{ settings.shopflo_match_checkout_animation_buy_now == false }}"
-      },
-      {
-        "type": "color_background",
-        "id": "shopflo_hover_background_buy_now",
-        "label": "Hover background",
-        "visible_if": "{{ settings.shopflo_match_checkout_animation_buy_now == false and settings.shopflo_hover_effect_buy_now != 'none' }}"
-      },
-      {
-        "type": "color_background",
-        "id": "shopflo_hover_text_color_buy_now",
-        "label": "Hover text color",
-        "visible_if": "{{ settings.shopflo_match_checkout_animation_buy_now == false and settings.shopflo_hover_effect_buy_now != 'none' }}"
-      },
-      {
-        "type": "checkbox",
-        "id": "shopflo_hover_border_match_bg_buy_now",
-        "label": "Match border color to hover background",
-        "info": "On hover, the button's border recolors to match the hover background instead of staying the base border color.",
-        "default": false,
-        "visible_if": "{{ settings.shopflo_match_checkout_animation_buy_now == false and settings.shopflo_hover_effect_buy_now != 'none' }}"
       },
       {
         "type": "header",
@@ -2624,7 +2467,7 @@
         "id": "shopflo_promo_font_size_buy_now",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 16,
@@ -2652,14 +2495,14 @@
         "type": "color_background",
         "id": "shopflo_promo_background_buy_now",
         "label": "Background color",
-        "default": "linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(0, 0, 0, 1) 100%)",
         "visible_if": "{{ settings.shopflo_match_checkout_promo_buy_now == false and settings.shopflo_promo_text_buy_now != blank }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_promo_color_buy_now",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_match_checkout_promo_buy_now == false and settings.shopflo_promo_text_buy_now != blank }}"
       },
       {
@@ -2667,7 +2510,7 @@
         "id": "shopflo_promo_gap_buy_now",
         "label": "Gap",
         "min": 1,
-        "max": 25,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 2,
@@ -2678,7 +2521,7 @@
         "id": "shopflo_promo_border_radius_buy_now",
         "label": "Border Radius",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 0,
@@ -2776,17 +2619,27 @@
         "info": "Leave blank to display icon only."
       },
       {
-        "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_a",
-        "label": "Bold text",
-        "default": true
+        "type": "select",
+        "id": "shopflo_account_font_weight_button_a",
+        "label": "Font weight",
+        "default": "normal",
+        "options": [
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "normal",
+            "label": "Normal"
+          }
+        ]
       },
       {
         "type": "range",
         "id": "shopflo_account_font_size_button_a",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 14
@@ -2802,7 +2655,7 @@
         "type": "color_background",
         "id": "shopflo_account_color_button_a",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_label_sync_header_button_a == false }}"
       },
       {
@@ -2834,7 +2687,7 @@
         "id": "shopflo_account_icon_gap_button_a",
         "label": "Icon Label gap",
         "min": 0,
-        "max": 24,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 6
@@ -2873,31 +2726,31 @@
         "type": "color_background",
         "id": "shopflo_account_icon_color_button_a",
         "label": "Icon color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_icon_source_button_a == 'shopflo' and settings.shopflo_account_icon_sync_header_button_a == false }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_account_button_background_button_a",
         "label": "Background color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)"
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)"
       },
       {
         "type": "range",
         "id": "shopflo_account_icon_size_button_a",
         "label": "Icon size",
         "min": 16,
-        "max": 32,
+        "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 20
+        "default": 22
       },
       {
         "type": "range",
         "id": "shopflo_account_padding_block_button_a",
         "label": "Vertical padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4
@@ -2907,7 +2760,7 @@
         "id": "shopflo_account_padding_inline_button_a",
         "label": "Horizontal padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4
@@ -2917,7 +2770,7 @@
         "id": "shopflo_account_button_radius_button_a",
         "label": "Corner radius",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 8
@@ -2978,7 +2831,7 @@
         "id": "shopflo_account_shadow_blur_button_a",
         "label": "Shadow blur",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 0,
@@ -2999,7 +2852,7 @@
         "type": "color_background",
         "id": "shopflo_account_shadow_color_button_a",
         "label": "Shadow color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)",
         "visible_if": "{{ settings.show_shopflo_account_button_shadow_button_a == true }}"
       },
       {
@@ -3087,10 +2940,20 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
-        "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_b",
-        "label": "Bold text",
-        "default": true,
+        "type": "select",
+        "id": "shopflo_account_font_weight_button_b",
+        "label": "Font weight",
+        "default": "normal",
+        "options": [
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "normal",
+            "label": "Normal"
+          }
+        ],
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
@@ -3098,7 +2961,7 @@
         "id": "shopflo_account_font_size_button_b",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 14,
@@ -3116,7 +2979,7 @@
         "type": "color_background",
         "id": "shopflo_account_color_button_b",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' and settings.shopflo_account_label_sync_header_button_b == false }}"
       },
       {
@@ -3149,7 +3012,7 @@
         "id": "shopflo_account_icon_gap_button_b",
         "label": "Icon spacing",
         "min": 0,
-        "max": 24,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 6,
@@ -3191,14 +3054,14 @@
         "type": "color_background",
         "id": "shopflo_account_icon_color_button_b",
         "label": "Icon color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' and settings.shopflo_account_icon_source_button_b == 'shopflo' and settings.shopflo_account_icon_sync_header_button_b == false }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_account_button_background_button_b",
         "label": "Background color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
@@ -3206,10 +3069,10 @@
         "id": "shopflo_account_icon_size_button_b",
         "label": "Icon size",
         "min": 16,
-        "max": 32,
+        "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 20,
+        "default": 22,
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' }}"
       },
       {
@@ -3217,7 +3080,7 @@
         "id": "shopflo_account_padding_block_button_b",
         "label": "Vertical padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4,
@@ -3228,7 +3091,7 @@
         "id": "shopflo_account_padding_inline_button_b",
         "label": "Horizontal padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4,
@@ -3239,7 +3102,7 @@
         "id": "shopflo_account_button_radius_button_b",
         "label": "Corner radius",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 8,
@@ -3303,7 +3166,7 @@
         "id": "shopflo_account_shadow_blur_button_b",
         "label": "Shadow blur",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 0,
@@ -3324,7 +3187,7 @@
         "type": "color_background",
         "id": "shopflo_account_shadow_color_button_b",
         "label": "Shadow color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_b == 'none' and settings.show_shopflo_account_button_shadow_button_b == true }}"
       },
       {
@@ -3412,10 +3275,20 @@
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
-        "type": "checkbox",
-        "id": "shopflo_account_bold_text_button_c",
-        "label": "Bold text",
-        "default": true,
+        "type": "select",
+        "id": "shopflo_account_font_weight_button_c",
+        "label": "Font weight",
+        "default": "normal",
+        "options": [
+          {
+            "value": "bold",
+            "label": "Bold"
+          },
+          {
+            "value": "normal",
+            "label": "Normal"
+          }
+        ],
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
@@ -3423,7 +3296,7 @@
         "id": "shopflo_account_font_size_button_c",
         "label": "Font size",
         "min": 1,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 14,
@@ -3441,7 +3314,7 @@
         "type": "color_background",
         "id": "shopflo_account_color_button_c",
         "label": "Text color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' and settings.shopflo_account_label_sync_header_button_c == false }}"
       },
       {
@@ -3474,7 +3347,7 @@
         "id": "shopflo_account_icon_gap_button_c",
         "label": "Icon spacing",
         "min": 0,
-        "max": 24,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 6,
@@ -3516,14 +3389,14 @@
         "type": "color_background",
         "id": "shopflo_account_icon_color_button_c",
         "label": "Icon color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 1) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' and settings.shopflo_account_icon_source_button_c == 'shopflo' and settings.shopflo_account_icon_sync_header_button_c == false }}"
       },
       {
         "type": "color_background",
         "id": "shopflo_account_button_background_button_c",
         "label": "Background color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
@@ -3531,10 +3404,10 @@
         "id": "shopflo_account_icon_size_button_c",
         "label": "Icon size",
         "min": 16,
-        "max": 32,
+        "max": 100,
         "step": 1,
         "unit": "px",
-        "default": 20,
+        "default": 22,
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' }}"
       },
       {
@@ -3542,7 +3415,7 @@
         "id": "shopflo_account_padding_block_button_c",
         "label": "Vertical padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4,
@@ -3553,7 +3426,7 @@
         "id": "shopflo_account_padding_inline_button_c",
         "label": "Horizontal padding",
         "min": 0,
-        "max": 16,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 4,
@@ -3564,7 +3437,7 @@
         "id": "shopflo_account_button_radius_button_c",
         "label": "Corner radius",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 8,
@@ -3628,7 +3501,7 @@
         "id": "shopflo_account_shadow_blur_button_c",
         "label": "Shadow blur",
         "min": 0,
-        "max": 50,
+        "max": 100,
         "step": 1,
         "unit": "px",
         "default": 0,
@@ -3649,7 +3522,7 @@
         "type": "color_background",
         "id": "shopflo_account_shadow_color_button_c",
         "label": "Shadow color",
-        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "default": "linear-gradient(90deg, rgba(255, 255, 255, 0) 100%)",
         "visible_if": "{{ settings.shopflo_account_match_with_button_c == 'none' and settings.show_shopflo_account_button_shadow_button_c == true }}"
       }
     ]
