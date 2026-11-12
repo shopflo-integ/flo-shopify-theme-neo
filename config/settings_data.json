@@ -126,7 +126,6 @@
         "show_vendor": false,
         "show_cart_note": false,
         "cart_drawer_collection": "hydrogen",
-        "shopflo_international_redirect_enabled": true,
         "sections": {
             "main-password-header": {
                 "type": "main-password-header",
